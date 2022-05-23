@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 const port =process.env.PORT || 5000
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 // middleWare=====
 app.use(cors())
@@ -21,18 +21,22 @@ async function run() {
       await client.connect();
       const HammerCollection = client.db("hammerCollection").collection("hammer");
       app.get('/products', async (req,res)=>{
-       
-     
-        // query for movies that have a runtime less than 15 minutes
-        const query = {  };
-       
+       const query = { };
         const cursor =  HammerCollection.find(query);
-        // print a message if no documents were found
-       
-        // replace console.dir with your callback to access individual elements
         const result=await cursor.toArray();
         res.send(result)
       })
+  // api call end
+  app.get('/products/:id', async(req,res)=>{
+    const id=req.params.id
+     const query={_id:ObjectId(id)};
+   
+     const result= await HammerCollection.findOne(query)
+     
+     res.send(result)
+  })
+
+
     } finally {
     //   await client.close();
     }
