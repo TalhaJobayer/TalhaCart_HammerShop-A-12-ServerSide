@@ -26,15 +26,30 @@ async function run() {
         const result=await cursor.toArray();
         res.send(result)
       })
-  // api call end
-  app.get('/products/:id', async(req,res)=>{
-    const id=req.params.id
-     const query={_id:ObjectId(id)};
-   
-     const result= await HammerCollection.findOne(query)
-     
-     res.send(result)
-  })
+      // for single product api
+      app.get('/products/:id', async(req,res)=>{
+        const id=req.params.id
+         const query={_id:ObjectId(id)};
+       
+         const result= await HammerCollection.findOne(query)
+         
+         res.send(result)
+      })
+  // api call end===================================
+  // crud Oparetion===========
+// post===============
+app.post('/products', async(req,res)=>{
+    const  newProduct=req.body
+      const   result=await HammerCollection.insertOne(newProduct)
+         res.send(result)
+    })
+// post===============
+
+
+
+  // crud Oparetion===========
+  
+ 
 
 
     } finally {
