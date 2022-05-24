@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const jwt=require('jsonwebtoken')
 const port =process.env.PORT || 5000
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const sign = require('jsonwebtoken/sign')
 
 // middleWare=====
 app.use(cors())
@@ -20,6 +22,7 @@ async function run() {
     try {
       await client.connect();
       const HammerCollection = client.db("hammerCollection").collection("hammer");
+      const userCollection = client.db("hammerCollection").collection("user");
       app.get('/products', async (req,res)=>{
        const query = { };
         const cursor =  HammerCollection.find(query);
@@ -44,6 +47,22 @@ app.post('/products', async(req,res)=>{
          res.send(result)
     })
 // post===============
+// put user===============
+
+app.put('/user/:email',async(req,res)=>{
+      const email=req.params.email
+      const user=req.body
+      const filter = { email: email };
+   
+    const options = { upsert: true };
+    const updateDoc = {
+      $set:user,
+    };
+    const result = await userCollection.updateOne(filter, updateDoc, options);
+    const token=jwt.sign({email:email}, process.env.ACCES_TOKEN,{expiresIn:'1h'})
+    res.send({ result, token });
+})
+// put user===============
 
 
 
