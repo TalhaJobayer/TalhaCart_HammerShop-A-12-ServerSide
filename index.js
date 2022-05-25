@@ -93,7 +93,16 @@ app.put('/user/:email',async(req,res)=>{
     res.send({ result, token });
 })
 // put user===============
-
+//  to delete spesific products=================
+app.delete('/orderProductss/:id', async (req,res) => {
+  const id=req.params.id
+  console.log(id);
+     const query={_id:ObjectId(id)}
+     console.log(query);
+     const result= await  orderCollection.deleteOne(query)
+     res.send(result)
+});
+//  to delete products=================
 
 
   // crud Oparetion===========
