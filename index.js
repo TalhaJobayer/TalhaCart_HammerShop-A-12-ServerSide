@@ -55,6 +55,13 @@ async function run() {
          
          res.send(result)
       })
+      // user api==============
+      app.get('/user', varifyJWT, async (req,res)=>{
+        const query = { };
+         const cursor =  userCollection.find(query);
+         const result=await cursor.toArray();
+         res.send(result)
+       })
       
   // api call end===================================
   // crud Oparetion===========
@@ -116,6 +123,18 @@ app.put('/user/:email',async(req,res)=>{
     const token=jwt.sign({email:email}, process.env.ACCES_TOKEN,{expiresIn:'1h'})
     res.send({ result, token });
 })
+// for addmin====================
+app.put('/user/admin/:email',async(req,res)=>{
+  const email = req.params.email;
+  const filter = { email: email };
+  const updateDoc = {
+        $set: { role: 'admin' },
+      };
+  const result = await userCollection.updateOne(filter, updateDoc);
+
+   res.send(result );
+})
+// for addmin====================
 // put user===============
 //  to delete spesific products=================
 app.delete('/orderProductss/:id', async (req,res) => {
