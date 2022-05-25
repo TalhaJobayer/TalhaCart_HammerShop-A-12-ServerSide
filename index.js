@@ -52,17 +52,30 @@ app.post('/products', async(req,res)=>{
 // ordered product=================
 app.post('/orderProducts', async(req,res)=>{
   const  newProduct=req.body
+  
     const   result=await orderCollection.insertOne(newProduct)
        res.send(result)
   })
   // order product api====
   app.get('/orderProducts', async (req,res)=>{
+   
     const query = { };
      const cursor =  orderCollection.find(query);
      const result=await cursor.toArray();
      res.send(result)
    })
   // order product api====
+  //specific order product api====
+  app.get('/orderProductss', async (req,res)=>{
+    const email=req.query.email
+    console.log(email);
+    const query = {email:email };
+     const cursor =  orderCollection.find(query);
+     const result=await cursor.toArray();
+    
+     res.send(result)
+   })
+  // specific order product api====
 // ordered product=================
 // put user===============
 
