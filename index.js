@@ -62,6 +62,13 @@ async function run() {
          const result=await cursor.toArray();
          res.send(result)
        })
+      // admin api==============
+      app.get('/admin/:email', varifyJWT,  async (req,res)=>{
+        const email = req.params.email;
+      const user = await userCollection.findOne({ email: email });
+      const isAdmin = user.role === 'admin';
+      res.send({ admin: isAdmin })
+       })
       
   // api call end===================================
   // crud Oparetion===========
@@ -110,7 +117,7 @@ app.post('/orderProducts', async(req,res)=>{
 // ordered product=================
 // put user===============
 
-app.put('/user/:email',async(req,res)=>{
+app.put('/user/:email', async(req,res)=>{
       const email=req.params.email
       const user=req.body
       const filter = { email: email };
@@ -124,20 +131,28 @@ app.put('/user/:email',async(req,res)=>{
     res.send({ result, token });
 })
 // for addmin====================
-app.put('/user/admin/:email',async(req,res)=>{
+app.put('/user/admin/:email', varifyJWT, async(req,res)=>{
   const email = req.params.email;
-  const filter = { email: email };
-  const updateDoc = {
-        $set: { role: 'admin' },
-      };
-  const result = await userCollection.updateOne(filter, updateDoc);
-
-   res.send(result );
+  const requester=req.decoded.email
+  const requesterAccount= await userCollection.findOne({email:requester})
+  if(requesterAccount.role=== 'admin'){
+    const filter = { email: email };
+    const updateDoc = {
+          $set: { role: 'admin' },
+        };
+    const result = await userCollection.updateOne(filter, updateDoc);
+  
+     res.send(result );
+  }
+  else{
+    res.status(403).send({message:"forbidden access"})
+  }
+  
 })
 // for addmin====================
 // put user===============
 //  to delete spesific products=================
-app.delete('/orderProductss/:id', async (req,res) => {
+app.delete('/orderProductss/:id',  async (req,res) => {
   const id=req.params.id
   console.log(id);
      const query={_id:ObjectId(id)}
