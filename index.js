@@ -151,7 +151,7 @@ app.put('/user/admin/:email', varifyJWT, async(req,res)=>{
 })
 // for addmin====================
 // put user===============
-//  to delete spesific products=================
+//  to delete spesific orderd products=================
 app.delete('/orderProductss/:id',  async (req,res) => {
   const id=req.params.id
   console.log(id);
@@ -160,7 +160,15 @@ app.delete('/orderProductss/:id',  async (req,res) => {
      const result= await  orderCollection.deleteOne(query)
      res.send(result)
 });
-//  to delete products=================
+//  to delete  spesific orderd products=================
+//  to delete  form manage product  products=================
+app.delete('/products/:id', async (req,res) => {
+  const id=req.params.id
+     const query={_id:ObjectId(id)}
+     const result= await HammerCollection.deleteOne(query)
+     res.send(result)
+});
+//  to delete   products=================
 
 
   // crud Oparetion===========
