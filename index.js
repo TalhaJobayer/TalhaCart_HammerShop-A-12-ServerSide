@@ -23,6 +23,7 @@ async function run() {
       await client.connect();
       const HammerCollection = client.db("hammerCollection").collection("hammer");
       const userCollection = client.db("hammerCollection").collection("user");
+      const orderCollection = client.db("hammerCollection").collection("Order");
       app.get('/products', async (req,res)=>{
        const query = { };
         const cursor =  HammerCollection.find(query);
@@ -38,6 +39,7 @@ async function run() {
          
          res.send(result)
       })
+      
   // api call end===================================
   // crud Oparetion===========
 // post===============
@@ -47,6 +49,21 @@ app.post('/products', async(req,res)=>{
          res.send(result)
     })
 // post===============
+// ordered product=================
+app.post('/orderProducts', async(req,res)=>{
+  const  newProduct=req.body
+    const   result=await orderCollection.insertOne(newProduct)
+       res.send(result)
+  })
+  // order product api====
+  app.get('/orderProducts', async (req,res)=>{
+    const query = { };
+     const cursor =  orderCollection.find(query);
+     const result=await cursor.toArray();
+     res.send(result)
+   })
+  // order product api====
+// ordered product=================
 // put user===============
 
 app.put('/user/:email',async(req,res)=>{
