@@ -149,7 +149,7 @@ app.put('/user/admin/:email', varifyJWT, async(req,res)=>{
   }
   
 })
-// for addmin====================
+// for addmin======================
 // put user===============
 //  to delete spesific orderd products=================
 app.delete('/orderProductss/:id',  async (req,res) => {
