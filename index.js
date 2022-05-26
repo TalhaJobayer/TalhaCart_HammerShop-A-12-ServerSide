@@ -160,7 +160,7 @@ app.delete('/orderProductss/:id',  async (req,res) => {
      const result= await  orderCollection.deleteOne(query)
      res.send(result)
 });
-//  to delete  spesific orderd products=================
+//  to delete  spesific  orderd products=================
 //  to delete  form manage product  products=================
 app.delete('/products/:id', async (req,res) => {
   const id=req.params.id
